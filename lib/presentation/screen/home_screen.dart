@@ -21,9 +21,19 @@ class HomeContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeViewModel viewModel = Provider.of<HomeViewModel>(context);
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: Text('home'),
+        //consumer
+        child: Consumer<HomeViewModel>(
+          builder: (_, HomeViewModel viewModel, __) {
+            return ListView.builder(
+              itemCount: viewModel.characters.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Text(viewModel.characters[index].name ?? '');
+              },
+            );
+          },
+        ),
       ),
     );
   }

@@ -28,7 +28,7 @@ extension GetItInjectableX on _i1.GetIt {
       environmentFilter,
     );
     gh.singleton<_i3.AuthService>(_i3.AuthService.inject());
-    gh.singleton<_i4.ConnectivityServive>(_i4.ConnectivityServive());
+    gh.singleton<_i4.ConnectivityServive>(_i4.ConnectivityServive.inject());
     gh.singleton<_i5.DioClient>(_i5.DioClient.inject());
     gh.singleton<_i6.AuthorizationBearerInterceptor>(
         _i6.AuthorizationBearerInterceptor(
