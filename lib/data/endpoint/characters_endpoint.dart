@@ -16,4 +16,10 @@ abstract class CharacterEndpoint {
 
   @GET("/characters")
   Future<ResponseDto> getCharacters();
+
+  @GET("/characters")
+  Future<ResponseDto> getCharactersPaginated(
+    @Query("limit") int? limit,
+    @Query("offset") int? offset,
+  );
 }

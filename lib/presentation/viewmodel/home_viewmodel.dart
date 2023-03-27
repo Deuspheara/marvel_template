@@ -9,17 +9,16 @@ import '../../data/model/character.dart';
 
 class HomeViewModel extends ChangeNotifier {
   final CharacterEndpoint characterEndpoint;
-  final ConnectivityServive _connectivityServive;
+  final ConnectivityServive connectivityService;
 
   List<Character> characters = [];
 
-  HomeViewModel._(this._connectivityServive,
-      {required this.characterEndpoint}) {
+  HomeViewModel._(this.connectivityService, {required this.characterEndpoint}) {
     _init();
   }
 
   Future<void> _init() async {
-    final bool isConnected = await _connectivityServive.isConnected();
+    final bool isConnected = await connectivityService.isConnected();
     if (isConnected) {
       var response = await characterEndpoint.getCharacters();
 
@@ -44,10 +43,10 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<void> load() async {
     try {
-      final bool isConnected = await _connectivityServive.isConnected();
+      final bool isConnected = await connectivityService.isConnected();
       if (isConnected) {
         var response = await characterEndpoint.getCharacters();
-        characters = response.data.map((e) => Character.fromJson(e)).toList();
+        characters = CharacterResponse.fromJson(response.data).results ?? [];
         notifyListeners();
       }
     } catch (e) {

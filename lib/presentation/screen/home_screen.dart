@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:marvel_app/presentation/utils/paged_characters_list_view.dart';
 import 'package:marvel_app/presentation/viewmodel/home_viewmodel.dart';
 import 'package:provider/provider.dart';
 
@@ -24,15 +25,9 @@ class HomeContent extends StatelessWidget {
     return Scaffold(
       body: Center(
         //consumer
-        child: Consumer<HomeViewModel>(
-          builder: (_, HomeViewModel viewModel, __) {
-            return ListView.builder(
-              itemCount: viewModel.characters.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Text(viewModel.characters[index].name ?? '');
-              },
-            );
-          },
+        child: PagedCharactersListView(
+          characterEndpoint: viewModel.characterEndpoint,
+          connectivityService: viewModel.connectivityService,
         ),
       ),
     );
