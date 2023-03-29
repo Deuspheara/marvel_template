@@ -16,11 +16,7 @@ CharacterResponse _$CharacterResponseFromJson(Map<String, dynamic> json) =>
           limit: $checkedConvert('limit', (v) => v as int?),
           total: $checkedConvert('total', (v) => v as int?),
           count: $checkedConvert('count', (v) => v as int?),
-          results: $checkedConvert(
-              'results',
-              (v) => (v as List<dynamic>?)
-                  ?.map((e) => Character.fromJson(e as Map<String, dynamic>))
-                  .toList()),
+          results: $checkedConvert('results', (v) => v),
         );
         return val;
       },
@@ -32,5 +28,5 @@ Map<String, dynamic> _$CharacterResponseToJson(CharacterResponse instance) =>
       'limit': instance.limit,
       'total': instance.total,
       'count': instance.count,
-      'results': instance.results?.map((e) => e.toJson()).toList(),
+      'results': instance.results,
     };

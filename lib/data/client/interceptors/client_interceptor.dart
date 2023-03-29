@@ -34,6 +34,8 @@ class AuthorizationBearerInterceptor {
     options.queryParameters.addAll(headers);
 
     requestInterceptorHandler.next(options);
+
+    print('Request: ${options.uri}');
   }
 
   void _registerInterceptor() {

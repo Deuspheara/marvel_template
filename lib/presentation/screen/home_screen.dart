@@ -23,8 +23,7 @@ class HomeContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final HomeViewModel viewModel = Provider.of<HomeViewModel>(context);
     return Scaffold(
-      body: Center(
-        //consumer
+      body: SafeArea(
         child: PagedCharactersListView(
           characterEndpoint: viewModel.characterEndpoint,
           connectivityService: viewModel.connectivityService,

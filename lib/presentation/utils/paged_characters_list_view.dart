@@ -39,7 +39,7 @@ class _PagedCharactersListViewState extends State<PagedCharactersListView> {
 
   Future<void> _fetchPage(int pageKey) async {
     final bool isConnected = await widget.connectivityService.isConnected();
-
+    print('isConnected: $isConnected');
     if (isConnected) {
       try {
         final newPage =
@@ -48,13 +48,15 @@ class _PagedCharactersListViewState extends State<PagedCharactersListView> {
             // 2
             _pagingController.itemList?.length ?? 0;
 
-        final isLastPage = CharacterResponse.fromJson(newPage.data).total! <=
-            previouslyFetchedItemsCount + newPage.data.length;
-        final newItems = CharacterResponse.fromJson(newPage.data).results ?? [];
+        final isLastPage = newPage.data.total! <=
+            previouslyFetchedItemsCount + newPage.data.results.length;
+        final newItems = (newPage.data.results as List).map((e) {
+          return Character.fromJson(e);
+        }).toList();
 
         if (isLastPage) {
           // 3
-          _pagingController.appendLastPage(newItems);
+          _pagingController.appendLastPage(newItems as List<Character>);
         } else {
           final nextPageKey = pageKey + 20;
           _pagingController.appendPage(newItems, nextPageKey);
@@ -76,10 +78,12 @@ class _PagedCharactersListViewState extends State<PagedCharactersListView> {
         pagingController: _pagingController,
         builderDelegate: PagedChildBuilderDelegate<Character>(
           itemBuilder: (context, item, index) => ListTile(
+            onTap: () =>
+                Navigator.pushNamed(context, '/character', arguments: item.id),
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(16),
               child: Image.network(
-                '${item.thumbnail?.path ?? ""}.${item.thumbnail?.extension ?? ""}',
+                '${item.thumbnail?.path ?? ""}.${item.thumbnail?.extension ?? ".jpg"}',
                 width: 50,
                 height: 50,
                 fit: BoxFit.cover,

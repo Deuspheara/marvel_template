@@ -22,7 +22,10 @@ class HomeViewModel extends ChangeNotifier {
     if (isConnected) {
       var response = await characterEndpoint.getCharacters();
 
-      characters = CharacterResponse.fromJson(response.data).results ?? [];
+      characters = (response.data.results as List).map((e) {
+        return Character.fromJson(e);
+      }).toList();
+
       notifyListeners();
     }
   }
@@ -46,7 +49,9 @@ class HomeViewModel extends ChangeNotifier {
       final bool isConnected = await connectivityService.isConnected();
       if (isConnected) {
         var response = await characterEndpoint.getCharacters();
-        characters = CharacterResponse.fromJson(response.data).results ?? [];
+        characters = (response.data.results as List).map((e) {
+          return Character.fromJson(e);
+        }).toList();
         notifyListeners();
       }
     } catch (e) {

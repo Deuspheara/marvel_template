@@ -22,4 +22,16 @@ abstract class CharacterEndpoint {
     @Query("limit") int? limit,
     @Query("offset") int? offset,
   );
+
+  @GET("/characters/{characterId}")
+  Future<ResponseDto> getCharacterById(
+    @Path("characterId") int? characterId,
+  );
+
+  @GET("/characters/{characterId}/comics")
+  Future<ResponseDto> getCharacterComicsPaginated(
+    @Path("characterId") int? characterId,
+    @Query("limit") int? limit,
+    @Query("offset") int? offset,
+  );
 }

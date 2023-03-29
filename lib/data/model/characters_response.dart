@@ -10,7 +10,7 @@ class CharacterResponse {
   int? limit;
   int? total;
   int? count;
-  List<Character>? results;
+  dynamic results;
 
   CharacterResponse(
       {this.offset, this.limit, this.total, this.count, this.results});
