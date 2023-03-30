@@ -9,7 +9,7 @@ import '../utils/paged_stories_list_view.dart';
 import '../viewmodel/character_detail_viewmodel.dart';
 
 class CharacterDetailScreen extends StatefulWidget {
-  CharacterDetailScreen({Key? key}) : super(key: key);
+  const CharacterDetailScreen({Key? key}) : super(key: key);
 
   @override
   _CharacterDetailScreenState createState() => _CharacterDetailScreenState();
@@ -47,32 +47,33 @@ class _CharacterDetailContentState extends State<CharacterDetailContent> {
       appBar: AppBar(
         //take the theme color
         actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                //viewModel.toggleFavorite();
-              });
-            },
-            icon: viewModel.isFavorite
-                ? const Icon(Icons.favorite)
-                : const Icon(Icons.favorite_border),
+          ValueListenableBuilder(
+            valueListenable: viewModel.isFavoriteNotifier,
+            builder: (_, bool isFavorite, __) => IconButton(
+              onPressed: () {
+                setState(() {
+                  viewModel.toggleFavorite();
+                });
+              },
+              icon: isFavorite
+                  ? const Icon(Icons.favorite)
+                  : const Icon(Icons.favorite_border),
+            ),
           ),
         ],
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 0.0,
         title: Text("Marvel App"),
         flexibleSpace: PreferredSize(
-          child: Container(
-            child: ClipRRect(
-                child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
-                    child: Container(
-                      //   width: MediaQuery.of(context).size.width,
-                      //  height: MediaQuery.of(context).padding.top,
-                      color: Colors.transparent,
-                    ))),
-          ),
           preferredSize: Size(MediaQuery.of(context).size.width, 22),
+          child: ClipRRect(
+              child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
+                  child: Container(
+                    //   width: MediaQuery.of(context).size.width,
+                    //  height: MediaQuery.of(context).padding.top,
+                    color: Colors.transparent,
+                  ))),
         ),
       ),
       body: SafeArea(

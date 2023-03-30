@@ -8,12 +8,14 @@ import '../../data/model/character.dart';
 import '../../data/model/stories.dart';
 import '../../infrastructure/injections/injector.dart';
 import '../../infrastructure/services/connectivity_service.dart';
+import '../../infrastructure/services/local_storage_service.dart';
 
 class CharacterDetailViewModel extends ChangeNotifier {
   final CharacterEndpoint characterEndpoint;
   final ConnectivityServive connectivityService;
+  final LocalStorageService localStorageService;
 
-  bool isFavorite = false;
+  ValueNotifier<bool> isFavoriteNotifier = ValueNotifier<bool>(false);
 
   CharacterDetails character = CharacterDetails();
 
@@ -22,7 +24,7 @@ class CharacterDetailViewModel extends ChangeNotifier {
   List<Comics> comics = [];
   final ScrollController scrollController = ScrollController();
 
-  CharacterDetailViewModel._(this.connectivityService,
+  CharacterDetailViewModel._(this.connectivityService, this.localStorageService,
       {required this.characterEndpoint, required this.id}) {
     _init();
     load();
@@ -30,6 +32,7 @@ class CharacterDetailViewModel extends ChangeNotifier {
   }
 
   Future<void> _init() async {
+    isCharacterFavorite();
     scrollController.addListener(() {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
@@ -45,6 +48,7 @@ class CharacterDetailViewModel extends ChangeNotifier {
     return ChangeNotifierProvider<CharacterDetailViewModel>(
       create: (BuildContext context) => CharacterDetailViewModel._(
         injector<ConnectivityServive>(),
+        injector<LocalStorageService>(),
         characterEndpoint: injector<CharacterEndpoint>(),
         id: id,
       ),
@@ -85,6 +89,27 @@ class CharacterDetailViewModel extends ChangeNotifier {
         notifyListeners();
         offset += 20;
       }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //check if character id is in favorite box
+  Future<void> isCharacterFavorite() async {
+    try {
+      localStorageService.switchBox('favorite');
+      isFavoriteNotifier.value =
+          await localStorageService.isFavorite(id.toString());
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //toggle favorite
+  Future<void> toggleFavorite() async {
+    try {
+      isFavoriteNotifier.value = !isFavoriteNotifier.value;
+      await localStorageService.toggleFavorite(character.id.toString(), comics);
     } catch (e) {
       print(e);
     }

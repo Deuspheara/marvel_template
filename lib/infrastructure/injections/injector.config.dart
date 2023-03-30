@@ -9,11 +9,13 @@ import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 import 'package:marvel_app/data/client/dio_client.dart' as _i5;
 import 'package:marvel_app/data/client/interceptors/client_interceptor.dart'
-    as _i6;
-import 'package:marvel_app/data/endpoint/characters_endpoint.dart' as _i7;
+    as _i7;
+import 'package:marvel_app/data/endpoint/characters_endpoint.dart' as _i8;
 import 'package:marvel_app/infrastructure/services/auth_service.dart' as _i3;
 import 'package:marvel_app/infrastructure/services/connectivity_service.dart'
-    as _i4; // ignore_for_file: unnecessary_lambdas
+    as _i4;
+import 'package:marvel_app/infrastructure/services/local_storage_service.dart'
+    as _i6; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars
 extension GetItInjectableX on _i1.GetIt {
@@ -30,13 +32,14 @@ extension GetItInjectableX on _i1.GetIt {
     gh.singleton<_i3.AuthService>(_i3.AuthService.inject());
     gh.singleton<_i4.ConnectivityServive>(_i4.ConnectivityServive.inject());
     gh.singleton<_i5.DioClient>(_i5.DioClient.inject());
-    gh.singleton<_i6.AuthorizationBearerInterceptor>(
-        _i6.AuthorizationBearerInterceptor(
+    gh.singleton<_i6.LocalStorageService>(_i6.LocalStorageService.inject());
+    gh.singleton<_i7.AuthorizationBearerInterceptor>(
+        _i7.AuthorizationBearerInterceptor(
       gh<_i5.DioClient>(),
       gh<_i3.AuthService>(),
     ));
-    gh.factory<_i7.CharacterEndpoint>(
-        () => _i7.CharacterEndpoint(gh<_i5.DioClient>()));
+    gh.factory<_i8.CharacterEndpoint>(
+        () => _i8.CharacterEndpoint(gh<_i5.DioClient>()));
     return this;
   }
 }
