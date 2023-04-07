@@ -15,6 +15,14 @@ class RessourceService {
     return RessourceService._();
   }
 
+  /*
+  * loadRessource from local storage
+  *
+  * @param path: path of the file
+  * @param extension: extension of the file
+  *
+  * @return File
+  * */
   Future<File> loadRessource(String path, String extension) async {
     final appDocDir = await path_provider.getApplicationDocumentsDirectory();
     final appDocPath = appDocDir.path;
@@ -23,7 +31,15 @@ class RessourceService {
     return File('$appDocPath/$path.$extension');
   }
 
-  //saveRessource in local storage
+  /*
+  * saveRessource from network to local storage
+  *
+  * @param path: path of the file
+  * @param extension: extension of the file
+  * @param networkUrl: url of the file
+  *
+  * @return Map<String, String>
+  * */
   Future<Map<String, String>> saveRessource(
       String path, String extension, Uint8List networkUrl) async {
     final appDocDir = await path_provider.getApplicationDocumentsDirectory();
@@ -36,7 +52,13 @@ class RessourceService {
     return {"path": '$appDocPath/$path', "extension": extension};
   }
 
-  //get image from network
+  /*
+  * getImage from network
+  *
+  * @param path: url of the file
+  *
+  * @return Uint8List
+  * */
   Future<Uint8List> getImage(String path) async {
     final response = await http.get(Uri.parse(path));
     if (response.statusCode == 200) {

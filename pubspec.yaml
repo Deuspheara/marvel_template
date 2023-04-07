@@ -51,6 +51,7 @@ dependencies:
   hive_generator: ^2.0.0
   http: ^0.13.5
   cached_network_image: ^3.2.3
+  google_maps_flutter: ^2.2.5
 
 dev_dependencies:
   flutter_test:
