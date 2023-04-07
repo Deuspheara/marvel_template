@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         home: const HomeScreen(),
         routes: <String, WidgetBuilder>{
           '/home': (BuildContext context) => const HomeScreen(),
-          '/character': (BuildContext context) => CharacterDetailScreen(),
+          '/character': (BuildContext context) => const CharacterDetailScreen(),
         });
   }
 }

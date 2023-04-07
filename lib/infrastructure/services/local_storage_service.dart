@@ -1,54 +1,70 @@
 import 'package:injectable/injectable.dart';
 import 'package:hive/hive.dart';
+import 'package:marvel_app/data/dto/favorite.dart';
 
 @singleton
 class LocalStorageService {
   final HiveInterface _hive;
 
-  String boxName;
+  late Box box;
 
-  LocalStorageService._(this._hive, {required this.boxName});
+  LocalStorageService._(this._hive) {
+    switchBox<Favorite>('favorite');
+  }
 
   @factoryMethod
   static LocalStorageService inject() {
-    return LocalStorageService._(Hive, boxName: 'marvel_app');
+    return LocalStorageService._(Hive);
   }
 
-  void switchBox(String boxName) {
-    this.boxName = boxName;
+  void switchBox<T>(String boxName) async {
+    await _hive.openBox<T>(boxName);
+    box = _hive.box<T>(boxName);
   }
 
-  Future<void> save(String key, dynamic value) async {
-    final box = await _hive.openBox(boxName);
+  Future<void> save<T>(String key, T value) async {
     await box.put(key, value);
   }
 
-  Future<dynamic> get(String key) async {
-    final box = await _hive.openBox(boxName);
+  Future<T?> get<T>(String key) async {
     return box.get(key);
   }
 
-  Future<void> put(String key, dynamic value) async {
-    final box = await _hive.openBox(boxName);
+  Future<void> put<T>(String key, T value) async {
     await box.put(key, value);
   }
 
-  Future<void> delete(String key) async {
-    final box = await _hive.openBox(boxName);
+  Future<void> delete<T>(String key) async {
     await box.delete(key);
   }
 
-  Future<bool> isFavorite(String key) async {
-    final box = await _hive.openBox(boxName);
+  Future<List<T>> getFavorites<T>() async {
+    return box.values.toList() as List<T>;
+  }
+
+  Future<bool> isFavorite<T>(String key) async {
     return box.containsKey(key);
   }
 
-  Future<void> toggleFavorite(String key, dynamic value) async {
-    final box = await _hive.openBox(boxName);
+  Future<void> toggleFavorite<T>(String key, T value) async {
     if (box.containsKey(key)) {
       await box.delete(key);
     } else {
       await box.put(key, value);
     }
+  }
+
+  Future<Box<T>> getBox<T>(String id) async {
+    return box as Box<T>;
+  }
+
+  Future<T> getBoxId<T>(String id) async {
+    return box.get(id) as T;
+  }
+
+  //update one field in a box
+  Future<void> updateField<T>(String key, String field, dynamic value) async {
+    final Box<T> boxValue = await getBox<T>(key);
+    await boxValue.put(field, value);
   }
 }

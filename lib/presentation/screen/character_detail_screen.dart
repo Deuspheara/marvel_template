@@ -1,10 +1,13 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:marvel_app/data/dto/favorite.dart';
+import 'package:marvel_app/presentation/utils/image_loader.dart';
 import 'package:marvel_app/presentation/utils/paged_characters_list_view.dart';
 import 'package:marvel_app/presentation/viewmodel/home_viewmodel.dart';
 import 'package:provider/provider.dart';
 
+import '../../data/model/character.dart';
 import '../utils/paged_stories_list_view.dart';
 import '../viewmodel/character_detail_viewmodel.dart';
 
@@ -19,11 +22,11 @@ class _CharacterDetailScreenState extends State<CharacterDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final Object? data = ModalRoute.of(context)?.settings.arguments;
-    final int? id = data as int?;
+    final Character? character = data as Character?;
 
     return CharacterDetailViewModel.buildWithProvider(
       builder: (_, __) => const CharacterDetailContent(),
-      id: id ?? 0,
+      character: character,
     );
   }
 }
@@ -63,7 +66,7 @@ class _CharacterDetailContentState extends State<CharacterDetailContent> {
         ],
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 0.0,
-        title: Text("Marvel App"),
+        title: const Text("Marvel App"),
         flexibleSpace: PreferredSize(
           preferredSize: Size(MediaQuery.of(context).size.width, 22),
           child: ClipRRect(
@@ -81,18 +84,13 @@ class _CharacterDetailContentState extends State<CharacterDetailContent> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.network(
-                  "${viewModel.character.thumbnail?.path}.${viewModel.character.thumbnail?.extension}",
-                  fit: BoxFit.cover, errorBuilder: (BuildContext context,
-                      Object exception, StackTrace? stackTrace) {
-                return const CircularProgressIndicator();
-              }, loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent? loadingProgress) {
-                if (loadingProgress == null) return child;
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }),
+              ImageLoader(
+                imageUrl:
+                    '${viewModel.character?.thumbnail?.path ?? ""}.${viewModel.character?.thumbnail?.extension ?? ".jpg"}',
+                width: MediaQuery.of(context).size.width,
+                height: 300,
+                fit: BoxFit.cover,
+              ),
               Container(
                 padding: const EdgeInsets.all(16),
                 child: Column(
@@ -102,13 +100,13 @@ class _CharacterDetailContentState extends State<CharacterDetailContent> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                          child: Text(viewModel.character.name ?? "",
+                          child: Text(viewModel.character?.name ?? "",
                               style: const TextStyle(
                                   fontSize: 24, fontWeight: FontWeight.bold)),
                         ),
                       ],
                     ),
-                    Text(viewModel.character.description ?? "",
+                    Text(viewModel.characterDetails.description ?? "",
                         style: const TextStyle(fontSize: 16)),
                     const SizedBox(height: 8),
                     InkWell(
@@ -136,7 +134,8 @@ class _CharacterDetailContentState extends State<CharacterDetailContent> {
                     SizedBox(
                       height: 350,
                       child: Visibility(
-                          visible: _showComics, child: PagedStoriesListView()),
+                          visible: _showComics,
+                          child: const PagedStoriesListView()),
                     ),
                   ],
                 ),

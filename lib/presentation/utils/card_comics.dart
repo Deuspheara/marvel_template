@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../data/model/comics.dart';
+import 'image_loader.dart';
 
 class CardComics extends StatelessWidget {
   const CardComics({
@@ -33,25 +34,14 @@ class CardComics extends StatelessWidget {
             const SizedBox(height: 16),
             //rounded corners
             ClipRRect(
-              borderRadius: BorderRadius.circular(10.0),
-              child: Image.network(
-                "${comics.thumbnail?.path}.${comics.thumbnail?.extension}",
-                height: 200,
-                width: 200 * 0.75,
-                fit: BoxFit.cover,
-                errorBuilder: (BuildContext context, Object exception,
-                    StackTrace? stackTrace) {
-                  return const CircularProgressIndicator();
-                },
-                loadingBuilder: (BuildContext context, Widget child,
-                    ImageChunkEvent? loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              ),
-            ),
+                borderRadius: BorderRadius.circular(10.0),
+                child: ImageLoader(
+                  imageUrl:
+                      '${comics.thumbnail?.path ?? ""}.${comics.thumbnail?.extension ?? ".jpg"}',
+                  width: 150,
+                  height: 150,
+                  fit: BoxFit.cover,
+                )),
 
             Padding(
               padding: const EdgeInsets.all(8.0),

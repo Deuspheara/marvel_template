@@ -16,6 +16,7 @@ class Character {
   @HiveField(2)
   String? resourceURI;
 
+  @HiveField(3)
   Thumbnail? thumbnail;
 
   Character({this.id, this.name, this.resourceURI, this.thumbnail});

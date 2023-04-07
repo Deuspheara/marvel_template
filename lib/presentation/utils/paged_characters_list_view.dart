@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../../data/endpoint/characters_endpoint.dart';
 import '../../infrastructure/services/connectivity_service.dart';
 import '../viewmodel/home_viewmodel.dart';
+import 'image_loader.dart';
 
 class PagedCharactersListView extends StatefulWidget {
   const PagedCharactersListView({
@@ -37,17 +38,18 @@ class _PagedCharactersListViewState extends State<PagedCharactersListView> {
               });
 
               return ListTile(
-                onTap: () => Navigator.pushNamed(context, '/character',
-                    arguments: item.id),
+                onTap: () {
+                  Navigator.pushNamed(context, '/character', arguments: item);
+                },
                 leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Image.network(
-                    '${item.thumbnail?.path ?? ""}.${item.thumbnail?.extension ?? ".jpg"}',
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                    borderRadius: BorderRadius.circular(16),
+                    child: ImageLoader(
+                      imageUrl:
+                          '${item.thumbnail?.path ?? ""}.${item.thumbnail?.extension ?? ".jpg"}',
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                    )),
                 title: Text(item.name ?? ''),
                 trailing: ValueListenableBuilder<bool>(
                   valueListenable: isFavorite,

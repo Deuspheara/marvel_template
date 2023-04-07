@@ -20,19 +20,22 @@ class CharacterAdapter extends TypeAdapter<Character> {
       id: fields[0] as int?,
       name: fields[1] as String?,
       resourceURI: fields[2] as String?,
+      thumbnail: fields[3] as Thumbnail?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Character obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.resourceURI);
+      ..write(obj.resourceURI)
+      ..writeByte(3)
+      ..write(obj.thumbnail);
   }
 
   @override

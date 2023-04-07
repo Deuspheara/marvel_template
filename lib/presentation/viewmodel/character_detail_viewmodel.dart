@@ -3,6 +3,7 @@ import 'package:marvel_app/data/model/character_details.dart';
 import 'package:marvel_app/data/model/comics.dart';
 import 'package:provider/provider.dart';
 
+import '../../data/dto/favorite.dart';
 import '../../data/endpoint/characters_endpoint.dart';
 import '../../data/model/character.dart';
 import '../../data/model/stories.dart';
@@ -17,18 +18,16 @@ class CharacterDetailViewModel extends ChangeNotifier {
 
   ValueNotifier<bool> isFavoriteNotifier = ValueNotifier<bool>(false);
 
-  CharacterDetails character = CharacterDetails();
+  CharacterDetails characterDetails = CharacterDetails();
 
-  final int id;
+  final Character? character;
   int offset = 0;
   List<Comics> comics = [];
   final ScrollController scrollController = ScrollController();
 
   CharacterDetailViewModel._(this.connectivityService, this.localStorageService,
-      {required this.characterEndpoint, required this.id}) {
+      {required this.characterEndpoint, required this.character}) {
     _init();
-    load();
-    loadComics();
   }
 
   Future<void> _init() async {
@@ -44,13 +43,13 @@ class CharacterDetailViewModel extends ChangeNotifier {
   static ChangeNotifierProvider<CharacterDetailViewModel> buildWithProvider(
       {required Widget Function(BuildContext context, Widget? child)? builder,
       Widget? child,
-      required int id}) {
+      required Character? character}) {
     return ChangeNotifierProvider<CharacterDetailViewModel>(
       create: (BuildContext context) => CharacterDetailViewModel._(
         injector<ConnectivityServive>(),
         injector<LocalStorageService>(),
         characterEndpoint: injector<CharacterEndpoint>(),
-        id: id,
+        character: character,
       ),
       builder: builder,
       lazy: false,
@@ -58,28 +57,14 @@ class CharacterDetailViewModel extends ChangeNotifier {
     );
   }
 
-  Future<void> load() async {
-    try {
-      final bool isConnected = await connectivityService.isConnected();
-      if (isConnected && id != character.id) {
-        var response = await characterEndpoint.getCharacterById(id);
-        character = (response.data.results as List).map((e) {
-          return CharacterDetails.fromJson(e);
-        }).first;
-        notifyListeners();
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   Future<void> loadComics() async {
     try {
       final bool isConnected = await connectivityService.isConnected();
+
       if (isConnected) {
         print("oui");
         var response = await characterEndpoint.getCharacterComicsPaginated(
-          id,
+          character?.id,
           20,
           offset,
         );
@@ -88,6 +73,14 @@ class CharacterDetailViewModel extends ChangeNotifier {
         }).toList());
         notifyListeners();
         offset += 20;
+      } else {
+        //load from local storage
+        if (comics.isEmpty) {
+          final Favorite comicsFromLocalStorage = await localStorageService
+              .getBoxId<Favorite>(character?.id.toString() ?? '');
+          comics.addAll(comicsFromLocalStorage.comics ?? []);
+          notifyListeners();
+        }
       }
     } catch (e) {
       print(e);
@@ -97,9 +90,9 @@ class CharacterDetailViewModel extends ChangeNotifier {
   //check if character id is in favorite box
   Future<void> isCharacterFavorite() async {
     try {
-      localStorageService.switchBox('favorite');
-      isFavoriteNotifier.value =
-          await localStorageService.isFavorite(id.toString());
+      localStorageService.switchBox<Favorite>('favorite');
+      isFavoriteNotifier.value = await localStorageService
+          .isFavorite<Favorite>(character?.id.toString() ?? '');
     } catch (e) {
       print(e);
     }
@@ -109,7 +102,9 @@ class CharacterDetailViewModel extends ChangeNotifier {
   Future<void> toggleFavorite() async {
     try {
       isFavoriteNotifier.value = !isFavoriteNotifier.value;
-      await localStorageService.toggleFavorite(character.id.toString(), comics);
+      await localStorageService.toggleFavorite<Favorite>(
+          characterDetails.id.toString(),
+          Favorite(character: characterDetails.toCharacter(), comics: comics));
     } catch (e) {
       print(e);
     }
