@@ -19,6 +19,10 @@ class FavoriteViewModel extends ChangeNotifier {
     load();
   }
 
+  /// Build with provider
+  /// take [builder] and [child] as parameters
+  ///
+  /// return [ChangeNotifierProvider<FavoriteViewModel>]
   static ChangeNotifierProvider<FavoriteViewModel> buildWithProvider(
       {required Widget Function(BuildContext context, Widget? child)? builder,
       Widget? child}) {
@@ -34,7 +38,7 @@ class FavoriteViewModel extends ChangeNotifier {
     );
   }
 
-  //load favorites from local storage
+  /// load favorites
   Future<void> load() async {
     try {
       localStorageService.switchBox<Favorite>('favorite');

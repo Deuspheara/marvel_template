@@ -31,6 +31,9 @@ class _CharacterDetailScreenState extends State<CharacterDetailScreen> {
   }
 }
 
+/*
+ * This is the content of the screen
+ */
 class CharacterDetailContent extends StatefulWidget {
   const CharacterDetailContent({Key? key}) : super(key: key);
 

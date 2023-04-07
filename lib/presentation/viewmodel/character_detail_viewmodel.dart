@@ -30,6 +30,7 @@ class CharacterDetailViewModel extends ChangeNotifier {
     _init();
   }
 
+  /// init
   Future<void> _init() async {
     isCharacterFavorite();
     scrollController.addListener(() {
@@ -40,6 +41,10 @@ class CharacterDetailViewModel extends ChangeNotifier {
     });
   }
 
+  /// build with provider
+  /// take [builder] and [Widget?] child as parameters, as well as [Character]
+  ///
+  /// return [ChangeNotifierProvider<CharacterDetailViewModel>]
   static ChangeNotifierProvider<CharacterDetailViewModel> buildWithProvider(
       {required Widget Function(BuildContext context, Widget? child)? builder,
       Widget? child,
@@ -57,6 +62,7 @@ class CharacterDetailViewModel extends ChangeNotifier {
     );
   }
 
+  /// load character details
   Future<void> loadComics() async {
     try {
       final bool isConnected = await connectivityService.isConnected();
@@ -87,7 +93,7 @@ class CharacterDetailViewModel extends ChangeNotifier {
     }
   }
 
-  //check if character id is in favorite box
+  /// check if character is favorite
   Future<void> isCharacterFavorite() async {
     try {
       localStorageService.switchBox<Favorite>('favorite');
@@ -98,7 +104,7 @@ class CharacterDetailViewModel extends ChangeNotifier {
     }
   }
 
-  //toggle favorite
+  /// toggle favorite
   Future<void> toggleFavorite() async {
     try {
       isFavoriteNotifier.value = !isFavoriteNotifier.value;

@@ -34,6 +34,7 @@ class HomeViewModel extends ChangeNotifier {
     _init();
   }
 
+  /// Init
   Future<void> _init() async {
     final bool isConnected = await connectivityService.isConnected();
     if (isConnected) {
@@ -53,6 +54,8 @@ class HomeViewModel extends ChangeNotifier {
     }
   }
 
+  /// Fetch page
+  /// take [pageKey] as parameter
   Future<void> _fetchPage(int pageKey) async {
     final bool isConnected = await connectivityService.isConnected();
     if (isConnected) {
@@ -80,6 +83,10 @@ class HomeViewModel extends ChangeNotifier {
     }
   }
 
+  /// Build with provider
+  /// take [builder] and [child] as parameters
+  ///
+  /// return [ChangeNotifierProvider<HomeViewModel>]
   static ChangeNotifierProvider<HomeViewModel> buildWithProvider(
       {required Widget Function(BuildContext context, Widget? child)? builder,
       Widget? child}) {
@@ -96,9 +103,7 @@ class HomeViewModel extends ChangeNotifier {
     );
   }
 
-  /*
-  * Function to load all characters
-  */
+  /// Function to load data
   Future<void> load() async {
     try {
       final bool isConnected = await connectivityService.isConnected();
@@ -116,11 +121,7 @@ class HomeViewModel extends ChangeNotifier {
     }
   }
 
-  /*
-  * Function to save a character in local storage because it is a favorite
-  *
-  * @param character
-  */
+  /// Function to save a character in local storage because it is a favorite
   Future<void> saveCharacter(Character character) async {
     try {
       final bool isConnected = await connectivityService.isConnected();
@@ -160,11 +161,7 @@ class HomeViewModel extends ChangeNotifier {
     }
   }
 
-  /*
-  * Function to delete a character in local storage because it is not a favorite anymore
-  *
-  * @param character
-  */
+  /// Function to delete a character in local storage because it is not a favorite anymore
   Future<void> deleteCharacter(Character character) async {
     try {
       //delete the character in local storage in favorite box
@@ -175,11 +172,7 @@ class HomeViewModel extends ChangeNotifier {
     }
   }
 
-  /*
-  * Function to check if a character is a favorite
-  *
-  * @param character
-  */
+  /// Function to check if a character is favorite
   Future<bool> isFavorite(Character character) async {
     try {
       localStorageService.switchBox<Favorite>('favorite');
@@ -190,11 +183,7 @@ class HomeViewModel extends ChangeNotifier {
     return false;
   }
 
-  /*
-  * Function to toggle a character in favorite or not
-  *
-  * @param character
-  */
+  /// Function to toggle a character favorite
   Future<void> toggleFavorite(Character character) async {
     try {
       if (await isFavorite(character)) {
