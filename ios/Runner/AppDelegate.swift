@@ -12,10 +12,7 @@ import GoogleMaps
         fatalError("Make sure GOOGLE_MAPS_API_KEY is set in the Info.plist file. And that GoogleMapsAPIKeys.xcconfig is included in the root folder with the key. See README for more details")
       }
 
-
     GMSServices.provideAPIKey(apiKey)
-
-
     
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)

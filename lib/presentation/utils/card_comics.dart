@@ -18,11 +18,11 @@ class CardComics extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(10.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
+              color: Theme.of(context).shadowColor,
               spreadRadius: 1,
               blurRadius: 7,
               offset: const Offset(0, 3), // changes position of shadow

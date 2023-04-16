@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:marvel_app/presentation/screen/favorite_screen.dart';
+import 'package:marvel_app/presentation/screen/settings_screen.dart';
 import 'package:marvel_app/presentation/utils/paged_characters_list_view.dart';
 import 'package:marvel_app/presentation/viewmodel/home_viewmodel.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
     PagedCharactersListView(),
     FavoriteScreen(),
     MapsScreen(),
+    SettingsScreen()
   ];
 
   @override
@@ -33,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return HomeViewModel.buildWithProvider(
       builder: (_, __) => Scaffold(
         bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
@@ -46,9 +49,12 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Icon(Icons.map),
               label: 'Map',
             ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Settings',
+            ),
           ],
           currentIndex: _selectedIndex,
-          selectedItemColor: Theme.of(context).primaryColor,
           onTap: _onItemTapped,
         ),
         body: SafeArea(
