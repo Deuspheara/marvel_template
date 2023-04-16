@@ -4,6 +4,8 @@ import 'package:marvel_app/presentation/utils/paged_characters_list_view.dart';
 import 'package:marvel_app/presentation/viewmodel/home_viewmodel.dart';
 import 'package:provider/provider.dart';
 
+import 'maps_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -22,7 +24,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _widgetOptions = <Widget>[
     PagedCharactersListView(),
-    FavoriteScreen()
+    FavoriteScreen(),
+    MapsScreen(),
   ];
 
   @override
@@ -38,6 +41,10 @@ class _HomeScreenState extends State<HomeScreen> {
             BottomNavigationBarItem(
               icon: Icon(Icons.favorite),
               label: 'Favorites',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.map),
+              label: 'Map',
             ),
           ],
           currentIndex: _selectedIndex,

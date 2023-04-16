@@ -1,7 +1,10 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:marvel_app/data/dto/character_position.dart';
+import 'package:marvel_app/data/dto/country_code.dart';
 import 'package:marvel_app/data/endpoint/characters_endpoint.dart';
 import 'package:marvel_app/data/model/characters_response.dart';
 import 'package:marvel_app/infrastructure/injections/injector.dart';
@@ -122,6 +125,8 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   /// Function to save a character in local storage because it is a favorite
+  ///
+  /// take [character] as parameter
   Future<void> saveCharacter(Character character) async {
     try {
       final bool isConnected = await connectivityService.isConnected();
@@ -150,8 +155,19 @@ class HomeViewModel extends ChangeNotifier {
         //save the character in local storage in favorite box
         localStorageService.switchBox<Favorite>('favorite');
 
-        localStorageService.save(character.id.toString(),
-            Favorite(character: character, comics: listComics));
+        var countryCode =
+            CountryCode.values[Random().nextInt(CountryCode.values.length)];
+        var latLng = countryCode.getRandomLatLng();
+
+        localStorageService.save(
+            character.id.toString(),
+            Favorite(
+                character: character,
+                comics: listComics,
+                position: CharacterPosition(
+                    latitude: latLng.latitude,
+                    longitude: latLng.longitude,
+                    country: countryCode)));
 
         localStorageService.updateField(
             character.id.toString(), "character", character);

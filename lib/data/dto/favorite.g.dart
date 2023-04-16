@@ -19,17 +19,20 @@ class FavoriteAdapter extends TypeAdapter<Favorite> {
     return Favorite(
       character: fields[0] as Character?,
       comics: (fields[1] as List?)?.cast<Comics>(),
+      position: fields[2] as CharacterPosition?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Favorite obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.character)
       ..writeByte(1)
-      ..write(obj.comics);
+      ..write(obj.comics)
+      ..writeByte(2)
+      ..write(obj.position);
   }
 
   @override
@@ -62,6 +65,11 @@ Favorite _$FavoriteFromJson(Map<String, dynamic> json) => $checkedCreate(
               (v) => (v as List<dynamic>?)
                   ?.map((e) => Comics.fromJson(e as Map<String, dynamic>))
                   .toList()),
+          position: $checkedConvert(
+              'position',
+              (v) => v == null
+                  ? null
+                  : CharacterPosition.fromJson(v as Map<String, dynamic>)),
         );
         return val;
       },
@@ -70,4 +78,5 @@ Favorite _$FavoriteFromJson(Map<String, dynamic> json) => $checkedCreate(
 Map<String, dynamic> _$FavoriteToJson(Favorite instance) => <String, dynamic>{
       'character': instance.character?.toJson(),
       'comics': instance.comics?.map((e) => e.toJson()).toList(),
+      'position': instance.position?.toJson(),
     };

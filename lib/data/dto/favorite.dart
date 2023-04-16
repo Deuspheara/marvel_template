@@ -4,6 +4,8 @@ import 'package:marvel_app/data/model/thumbnail.dart';
 
 import '../model/character.dart';
 import '../model/comics.dart';
+import 'character_position.dart';
+import 'country_code.dart';
 
 part 'favorite.g.dart';
 
@@ -17,7 +19,10 @@ class Favorite {
   @HiveField(1)
   List<Comics>? comics;
 
-  Favorite({this.character, this.comics});
+  @HiveField(2)
+  CharacterPosition? position;
+
+  Favorite({this.character, this.comics, this.position});
 
   factory Favorite.fromJson(Map<String, dynamic> json) =>
       _$FavoriteFromJson(json);

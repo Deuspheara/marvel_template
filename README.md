@@ -1,16 +1,19 @@
-# marvel_app
+# Marvel App
+This is a simple app that uses the Marvel API to display a list of characters and their comics, we ca, see the position of the different characters on a map with clustering.
 
-A new Flutter project.
+## Prerequisites
 
-## Getting Started
+To make google maps work, you need to add your own API key. To do so, follow the steps below:
 
-This project is a starting point for a Flutter application.
+- In android folder, create a file called local.properties in the root folder, and add the following line:
 
-A few resources to get you started if this is your first Flutter project:
+    ```
+    GOOGLE_MAPS_API_KEY= YOUR_MAPS_API_KEY
+    ```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- In ios folder, add a GoogleMapsAPIKeys.xcconfig in the root folder, with the following line:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+    ```
+    GOOGLE_MAPS_API_KEY = YOUR_MAPS_API_KEY
+    ```
+
