@@ -32,6 +32,9 @@ class _FavoriteContentState extends State<FavoriteContent> {
     final FavoriteViewModel viewModel = Provider.of<FavoriteViewModel>(context);
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Favorites'),
+      ),
       body: Center(
         child: Consumer<FavoriteViewModel>(
           builder: (_, FavoriteViewModel viewModel, __) {
@@ -44,6 +47,8 @@ class _FavoriteContentState extends State<FavoriteContent> {
                   leading: ClipRRect(
                       borderRadius: BorderRadius.circular(16),
                       child: ImageLoader(
+                        height: 50,
+                        width: 50,
                         imageUrl:
                             '${favorite.character?.thumbnail?.path ?? ""}.${favorite.character?.thumbnail?.extension ?? ".jpg"}',
                       )),
